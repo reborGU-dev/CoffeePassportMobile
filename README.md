@@ -54,3 +54,7 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+EJECUCIONES DEL PRIMER COMMIT
+1 - Se creo el proyecto con npx create-expo-app@latest CoffeePassport
+2 - Se abrio el proyecto con code . y se ejecuto dentro de la terminal de code el comando npx expo start el cual conecto con Android Studio
