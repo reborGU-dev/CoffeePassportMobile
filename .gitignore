@@ -31,7 +31,9 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env
+.env.local
+.env.*.local
 
 # typescript
 *.tsbuildinfo
@@ -41,3 +43,26 @@ example
 # generated native folders
 /ios
 /android
+
+# contract guides and course handout (not part of the app)
+/API-REACT.md
+/API-REACT-NATIVE.md
+/AUTENTICACION-JWT.md
+/CONECTAR-APP-LOCAL.md
+/QR-SELLOS-E-IMAGENES.md
+/Template 9no.md
+/Actividad9_CoffeePassport.pdf
+
+# design files, mock screens and helper scripts (not needed to run the app)
+/UI-REDISIGN.md
+/CoffeePassport_Design.figcraft
+/CoffeePassport_Design_Preview.png
+/coffee_passport_figcraft_script.json
+/generate_figcraft_design.py
+/exports/
+
+# local test artifacts
+/*.log
+/*.png
+/tmp/
+

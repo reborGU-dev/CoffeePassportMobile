@@ -1,60 +1,105 @@
-# Welcome to your Expo app 👋
+# ☕ Coffee Passport
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+App móvil para visitar cafeterías, coleccionar sellos y llevar un pasaporte cafetero.
+Está hecha con **Expo + React Native** (Expo Router, TypeScript) para **Android e iOS**.
 
-## Get started
+## Pantallas
 
-1. Install dependencies
+- **Acceso y registro**: inicio de sesión, creación de cuenta y modo invitado.
+- **Mapa**: pide permiso de ubicación, muestra las cafeterías geolocalizadas y ordena la
+  lista por distancia. Al tocar un pin se abre la ficha del local con foto, dirección,
+  distancia y el botón «Cómo llegar».
+- **Pasaporte**: sellos coleccionados, visitas recientes y progreso de nivel.
+- **Escanear**: lector de QR con permiso de cámara para registrar una visita.
+- **Perfil**: datos del catador, ajustes y menú de cuenta.
 
-   ```bash
-   npm install
-   ```
+Las pantallas de **Pasaporte** y **Perfil** se pueden ver sin backend: entra con
+«Continuar como invitado» y la app usa los datos de demostración de `src/data/demo.ts`.
+La pestaña **Mapa** sí necesita la API local de pruebas para mostrar el catálogo de
+cafeterías (sin ella muestra el aviso de «Sin conexión» y permite reintentar).
 
-2. Start the app
+## Requisitos
 
-   ```bash
-   npx expo start
-   ```
+- Node.js 20 o superior y npm.
+- [Expo Go](https://expo.dev/go) con **SDK 58** en un teléfono, o un emulador
+  Android/iOS. También puedes generar un build de desarrollo con
+  `npx expo run:android` / `npx expo run:ios`.
+- Opcional: la API local de pruebas (ver abajo).
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Cómo ejecutarla
 
 ```bash
-npm run reset-project
+# 1. Instala dependencias
+npm install
+
+# 2. Configura la URL de la API local
+#    Copia el ejemplo y ajusta la dirección (IP de tu equipo en la red Wi-Fi)
+cp .env.example .env          # macOS / Linux / Git Bash
+# Copy-Item .env.example .env # Windows PowerShell
+
+# 3. Arranca Metro
+npx expo start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Después:
 
-### Other setup steps
+- Escanea el QR con **Expo Go** (el teléfono y la computadora deben estar en la misma red).
+- O pulsa `a` para el emulador de Android / `i` para el simulador de iOS.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Si no creas el `.env`, la app usa una URL por defecto para el emulador de Android
+(`http://10.0.2.2:<puerto>`) o para iOS/web (`http://localhost:<puerto>`).
 
-## Learn more
+### API local de pruebas
 
-To learn more about developing your project with Expo, look at the following resources:
+El proyecto se desarrolló contra **una API local, solo para pruebas**; no está incluida
+en este repositorio. Configura su dirección en `.env` con la variable
+`EXPO_PUBLIC_API_URL` (ver `.env.example`). No se requieren claves ni servicios externos
+para ver el resto de la app.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Permisos
 
-## Join the community
+- **Ubicación**: se pide al abrir la pestaña Mapa y se usa para centrar el mapa y ordenar
+  las cafeterías por cercanía. Se declara con el plugin `expo-location` en `app.json`.
+- **Cámara**: se pide en la pantalla de escaneo para leer el código QR del local. Se
+  declara con el plugin `expo-camera` en `app.json`.
 
-Join our community of developers creating universal apps.
+En Expo Go ambos permisos funcionan con la configuración del proyecto. Para un build
+independiente de Android con Google Maps hay que agregar
+`android.config.googleMaps.apiKey` en `app.json` (Expo Go ya incluye una clave propia).
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Estructura
 
-EJECUCIONES DEL PRIMER COMMIT
-1 - Se creo el proyecto con npx create-expo-app@latest CoffeePassport
-2 - Se abrio el proyecto con code . y se ejecuto dentro de la terminal de code el comando npx expo start el cual conecto con Android Studio
+```text
+src/app/          Rutas y pantallas (Expo Router)
+src/components/   Componentes de UI, mapa y hoja de cafeterías
+src/hooks/        Lógica reutilizable (ubicación, cafeterías, pasaporte, tema)
+src/lib/          Cliente de la API, geolocalización, sesión y formato
+src/data/         Datos de demostración (mock)
+src/constants/    Tema, colores y espaciados
+assets/           Iconos, splash e imágenes
+```
+
+## Scripts
+
+| Comando | Qué hace |
+| --- | --- |
+| `npm start` | Arranca Metro (`expo start`). |
+| `npm run android` | Arranca Metro y abre Android. |
+| `npm run ios` | Arranca Metro y abre iOS. |
+| `npm run web` | Arranca la versión web. |
+| `npm run lint` | Revisa el código con ESLint (`expo lint`). |
+
+Comprobación de tipos:
+
+```bash
+npx tsc --noEmit
+```
+
+## Notas
+
+- El proyecto usa **Continuous Native Generation**: no hay carpetas `android/` ni `ios/`;
+  la configuración nativa vive en `app.json` y en los config plugins.
+- Para instalar una librería usa `npx expo install <paquete>` (elige la versión
+  compatible con el SDK en lugar de `npm install`).
+- La app funciona en Expo Go; si agregas una librería con código nativo necesitarás un
+  build de desarrollo (`npx expo run:android` o `eas build --profile development`).
